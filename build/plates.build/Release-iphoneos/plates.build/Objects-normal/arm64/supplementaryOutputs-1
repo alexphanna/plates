@@ -1,0 +1,12 @@
+{
+  "/Users/alex/Documents/plates/plates/ContentView.swift" : {
+    "abi-baseline-json" : "/Users/alex/Documents/plates/build/plates.build/Release-iphoneos/plates.build/Objects-normal/arm64/plates.abi.json",
+    "const-values" : "/Users/alex/Documents/plates/build/plates.build/Release-iphoneos/plates.build/Objects-normal/arm64/plates-primary.swiftconstvalues",
+    "dependencies" : "/Users/alex/Documents/plates/build/plates.build/Release-iphoneos/plates.build/Objects-normal/arm64/plates-primary.d",
+    "diagnostics" : "/Users/alex/Documents/plates/build/plates.build/Release-iphoneos/plates.build/Objects-normal/arm64/plates-primary.dia",
+    "objc-header" : "/Users/alex/Documents/plates/build/plates.build/Release-iphoneos/plates.build/Objects-normal/arm64/plates-Swift.h",
+    "swiftdoc" : "/Users/alex/Documents/plates/build/plates.build/Release-iphoneos/plates.build/Objects-normal/arm64/plates.swiftdoc",
+    "swiftmodule" : "/Users/alex/Documents/plates/build/plates.build/Release-iphoneos/plates.build/Objects-normal/arm64/plates.swiftmodule",
+    "swiftsourceinfo" : "/Users/alex/Documents/plates/build/plates.build/Release-iphoneos/plates.build/Objects-normal/arm64/plates.swiftsourceinfo"
+  }
+}
