@@ -1,4 +1,4 @@
-# Plates
+# <img src="plates/Assets.xcassets/AppIcon.appiconset/Plates.png" width="24" /> Plates
 A license plate spotting game for iOS written in Swift and Python using SwiftUI 
 
 ## Roadmap
