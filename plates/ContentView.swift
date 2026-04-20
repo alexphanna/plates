@@ -12,7 +12,7 @@ struct ContentView: View {
     var body: some View {
         TabView {
             Tab("Collection", systemImage: "licenseplate") {
-                Text("")
+                Text("Update from laptop")
             }
             Tab("Map", systemImage: "map") {
                 Map()
