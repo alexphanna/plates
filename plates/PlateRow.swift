@@ -13,21 +13,16 @@ struct PlateRow: View {
 
     var body: some View {
         HStack {
-            VStack(alignment: .leading) {
-                Text(plate.plateTitle)
-                    .font(.body)
-                Text("State: \(plate.state)")
-                    .font(.caption)
-                    .foregroundColor(.secondary)
-            }
+            Text(plate.plateTitle)
+                .font(.body)
             Spacer()
             if let url = URL(string: plate.sourceImg), !plate.sourceImg.isEmpty {
                 AsyncImage(url: url) { image in
                     image.resizable().scaledToFit()
+                        .frame(width: 60, height: 30)
                 } placeholder: {
                     //Image(systemName: "photo")
                 }
-                .frame(width: 60, height: 30)
             }
         }
     }
