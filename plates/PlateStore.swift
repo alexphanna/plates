@@ -9,32 +9,28 @@ import SwiftUI
 internal import Combine
 
 class PlateDataStore: ObservableObject {
-    // The whole plate tree (loaded from JSON)
     @Published var root: PlateNode
-
-    // @AppStorage stores the encoded spottings dictionary
     @AppStorage("plateSpottings") private var spottingsData: Data = Data()
-
-    // In-memory dictionary parsed from spottingsData
     private var spottings: [String: [Spotting]] = [:]
 
+    // FAST LOOKUP DICTIONARY
+    private(set) var plateDictionary: [String: LicensePlate] = [:]
+
     init() {
-        // 1. Load tree from JSON (unchanged)
         self.root = try! TreeLoader.loadTree(from: "plates")
-        // 2. Parse existing spottings from UserDefaults
         loadSpottingsFromStorage()
-        // 3. Apply saved spottings to the tree
         applySpottingsToTree()
+        rebuildDictionary()
     }
 
     // MARK: - Spottings management
-
     func addSpotting(for plateID: String, spotting: Spotting) {
         spottings[plateID, default: []].append(spotting)
         saveSpottingsToStorage()
         applySpottingsToTree()
+        rebuildDictionary()
     }
-
+    
     // Rebuild spottings dictionary from @AppStorage data
     private func loadSpottingsFromStorage() {
         guard !spottingsData.isEmpty else { return }
@@ -65,16 +61,26 @@ class PlateDataStore: ObservableObject {
             apply(to: &node.children[i])
         }
     }
-    
-    func findPlate(by id: String, in node: PlateNode) -> LicensePlate? {
-            if let plate = node.plates.first(where: { $0.id == id }) {
-                return plate
-            }
-            for child in node.children {
-                if let found = findPlate(by: id, in: child) {
-                    return found
-                }
-            }
-            return nil
+
+    // Rebuild the flat dictionary by walking the tree
+    private func rebuildDictionary() {
+        var dict: [String: LicensePlate] = [:]
+        addToDictionary(&dict, node: root)
+        plateDictionary = dict
+    }
+
+    private func addToDictionary(_ dict: inout [String: LicensePlate], node: PlateNode) {
+        for plate in node.plates {
+            dict[plate.id] = plate
         }
+        for child in node.children {
+            addToDictionary(&dict, node: child)
+        }
+    }
+
+    // ... existing code for loadSpottings, saveSpottings, applySpottingsToTree ...
+    // findPlate(by:in:) can now simply use the dictionary, or you can remove it entirely
+    func findPlate(by id: String) -> LicensePlate? {
+        plateDictionary[id]
+    }
 }

@@ -16,19 +16,19 @@ struct PlateView: View {
 
     // Get the up‑to‑date plate from the store
     private var plate: LicensePlate? {
-        store.findPlate(by: plateID, in: store.root)
+        store.findPlate(by: plateID)
     }
 
     var body: some View {
         NavigationStack {
             List {
                 if let plate {
-                    Section {
-                        if let url = URL(string: plate.sourceImg), !plate.sourceImg.isEmpty {
-                            AsyncImage(url: url) { image in
-                                image.resizable().scaledToFit()
-                            } placeholder: {
-                                // placeholder
+                    if let url = URL(string: plate.sourceImg), !plate.sourceImg.isEmpty {
+                        AsyncImage(url: url) { phase in
+                            if case .success(let image) = phase {
+                                Section {
+                                    image.resizable().scaledToFit()
+                                }
                             }
                         }
                     }
