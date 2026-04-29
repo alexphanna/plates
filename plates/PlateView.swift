@@ -10,39 +10,49 @@ import CoreLocation
 
 // MARK: - Plate Row
 struct PlateView: View {
-    @State var plate: LicensePlate
+    @EnvironmentObject var store: PlateDataStore
+    let plateID: String          // ← changed from plate to ID
     let locationManager = CLLocationManager()
+
+    // Get the up‑to‑date plate from the store
+    private var plate: LicensePlate? {
+        store.findPlate(by: plateID, in: store.root)
+    }
 
     var body: some View {
         NavigationStack {
             List {
-                Section {
-                    if let url = URL(string: plate.sourceImg), !plate.sourceImg.isEmpty {
-                        AsyncImage(url: url) { image in
-                            image.resizable().scaledToFit()
-                        } placeholder: {
-                            //Image(systemName: "photo")
+                if let plate {
+                    Section {
+                        if let url = URL(string: plate.sourceImg), !plate.sourceImg.isEmpty {
+                            AsyncImage(url: url) { image in
+                                image.resizable().scaledToFit()
+                            } placeholder: {
+                                // placeholder
+                            }
                         }
+                        Text(plate.plateTitle)
+                            .bold()
                     }
-                    Text(plate.plateTitle)
-                        .bold()
-                }
-                if (!plate.spottings.isEmpty) {
-                    Section(header: Text("Spottings")) {
-                        ForEach(plate.spottings, id: \.self) { spotting in
-                            Text(spotting.date.description)
+                    if !plate.spottings.isEmpty {
+                        Section(header: Text("Spottings")) {
+                            ForEach(plate.spottings, id: \.self) { spotting in
+                                Text(spotting.date.description)
+                            }
                         }
                     }
                 }
             }
             .toolbar {
                 Button {
-                    plate.spottings.append(Spotting(location: locationManager.location!))
+                    let newSpot = Spotting(date: Date(), location: locationManager.location!)
+                    store.addSpotting(for: plateID, spotting: newSpot)
                 } label: {
                     Image(systemName: "eye")
                 }
             }
-        }.onAppear(perform: fetch)
+        }
+        .onAppear(perform: fetch)
     }
     
     private func fetch() {

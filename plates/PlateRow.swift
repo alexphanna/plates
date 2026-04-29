@@ -12,7 +12,7 @@ struct PlateRow: View {
     let plate: LicensePlate
 
     var body: some View {
-        NavigationLink(destination: PlateView(plate: plate)) {
+        NavigationLink(destination: PlateView(plateID: plate.id)) {
             HStack {
                 Text(plate.plateTitle)
                 Spacer()

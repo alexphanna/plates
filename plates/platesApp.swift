@@ -9,9 +9,12 @@ import SwiftUI
 
 @main
 struct platesApp: App {
+    @StateObject private var store = PlateDataStore()
+    
     var body: some Scene {
         WindowGroup {
             ContentView()
+                .environmentObject(store)
         }
     }
 }

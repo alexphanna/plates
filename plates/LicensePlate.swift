@@ -25,8 +25,27 @@ struct LicensePlate: Codable, Identifiable {
 }
 
 struct Spotting: Hashable {
-    let date: Date = Date()
+    let date: Date
     let location: CLLocation
+}
+
+extension Spotting: Codable {
+    enum CodingKeys: String, CodingKey { case date, latitude, longitude }
+
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        date = try container.decode(Date.self, forKey: .date)
+        let lat = try container.decode(CLLocationDegrees.self, forKey: .latitude)
+        let lon = try container.decode(CLLocationDegrees.self, forKey: .longitude)
+        location = CLLocation(latitude: lat, longitude: lon)
+    }
+
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(date, forKey: .date)
+        try container.encode(location.coordinate.latitude, forKey: .latitude)
+        try container.encode(location.coordinate.longitude, forKey: .longitude)
+    }
 }
 
 struct PlateNode: Codable, Identifiable {
