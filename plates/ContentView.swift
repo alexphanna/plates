@@ -15,7 +15,7 @@ struct ContentView: View {
                 TreeContentView()
             }
             Tab("Map", systemImage: "map") {
-                Map()
+                MapView()
             }
         }
     }

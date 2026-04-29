@@ -31,13 +31,15 @@ struct PlateView: View {
                                 // placeholder
                             }
                         }
-                        Text(plate.plateTitle)
-                            .bold()
+                    }
+                    Section("Information") {
+                        LabeledContent("Title", value: plate.plateTitle)
+                        LabeledContent("State", value: plate.state)
                     }
                     if !plate.spottings.isEmpty {
                         Section(header: Text("Spottings")) {
                             ForEach(plate.spottings, id: \.self) { spotting in
-                                Text(spotting.date.description)
+                                Text(spotting.date.formatted())
                             }
                         }
                     }
