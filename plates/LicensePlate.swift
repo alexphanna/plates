@@ -7,6 +7,7 @@
 
 
 import Foundation
+import _LocationEssentials
 
 // MARK: - Model
 struct LicensePlate: Codable, Identifiable {
@@ -14,12 +15,18 @@ struct LicensePlate: Codable, Identifiable {
     let state: String
     let plateTitle: String
     let sourceImg: String
+    var spottings: [Spotting] = []
 
     enum CodingKeys: String, CodingKey {
         case state
         case plateTitle = "plate_title"
         case sourceImg = "source_img"
     }
+}
+
+struct Spotting: Hashable {
+    let date: Date = Date()
+    let location: CLLocation
 }
 
 struct PlateNode: Codable, Identifiable {

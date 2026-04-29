@@ -12,16 +12,17 @@ struct PlateRow: View {
     let plate: LicensePlate
 
     var body: some View {
-        HStack {
-            Text(plate.plateTitle)
-                .font(.body)
-            Spacer()
-            if let url = URL(string: plate.sourceImg), !plate.sourceImg.isEmpty {
-                AsyncImage(url: url) { image in
-                    image.resizable().scaledToFit()
-                        .frame(width: 60, height: 30)
-                } placeholder: {
-                    //Image(systemName: "photo")
+        NavigationLink(destination: PlateView(plate: plate)) {
+            HStack {
+                Text(plate.plateTitle)
+                Spacer()
+                if let url = URL(string: plate.sourceImg), !plate.sourceImg.isEmpty {
+                    AsyncImage(url: url) { image in
+                        image.resizable().scaledToFit()
+                            .frame(width: 60, height: 30)
+                    } placeholder: {
+                        //Image(systemName: "photo")
+                    }
                 }
             }
         }

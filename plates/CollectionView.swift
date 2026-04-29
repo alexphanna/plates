@@ -11,7 +11,8 @@ import SwiftUI
 struct TreeContentView: View {
     @State private var rootNode: PlateNode?
     @State private var errorMessage: String?
-    @State private var searchText = "" 
+    @State private var searchText = ""
+    @State private var filterBy = ""
 
     // Filtered version of the root node (nil while loading)
     var filteredRoot: PlateNode? {
@@ -35,7 +36,30 @@ struct TreeContentView: View {
                     ProgressView("Loading tree…")
                 }
             }
-            .navigationTitle("License Plates")
+            .navigationTitle("Collection")
+            .toolbar {
+                ToolbarItem(placement: .topBarTrailing) {
+                    Menu {
+                        Section {
+                            Picker(selection: $filterBy) {
+                                Section {
+                                    Label("All", systemImage: "licenseplate").tag("")
+                                }
+                                Section {
+                                    Label("Seen", systemImage: "eye").tag("Seen")
+                                    Label("Not Seen", systemImage: "eye.slash").tag("Not Seen")
+                                }
+                            } label: {
+                                Label("Filter", systemImage: filterBy == "" ? "line.3.horizontal.decrease.circle" : "line.3.horizontal.decrease.circle.fill")
+                                Text(filterBy)
+                            }
+                            .pickerStyle(.menu)
+                        }
+                    } label: {
+                        Image(systemName: "ellipsis.circle")
+                    }
+                }
+            }
         }
         .task {
             do {
@@ -55,6 +79,8 @@ struct TreeContentView: View {
         // Filter direct plates
         let matchingPlates = node.plates.filter {
             $0.plateTitle.lowercased().contains(query)       // adjust to your Plate property
+            && (filterBy != "Seen" || $0.spottings.count > 0)
+            && (filterBy != "Not Seen" || $0.spottings.count == 0)
         }
 
         // Recursively filter children
